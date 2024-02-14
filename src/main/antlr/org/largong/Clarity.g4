@@ -11,7 +11,7 @@ packageName: 'package' (LOWERCASE DOT)* LOWERCASE SEMI | ;
 ruleSpec: (lexerRuleSpec | parserRuleSpec) SEMI;
 
 lexerRuleSpec: lexerRuleDeclaration COLON lexerExpression;
-parserRuleSpec: parserRuleDeclaration (paramsBlock? | COLON parserExpression code?);
+parserRuleSpec: parserRuleDeclaration (declaration? | COLON parserExpression code?);
 
 lexerRuleDeclaration: UPPERCASE;
 parserRuleDeclaration: LOWERCASE;
@@ -34,13 +34,13 @@ lexerRegex: REGEX;
 
 name: LOWERCASE | UPPERCASE;
 
-paramsBlock: params returnsParams?;
+declaration: args returnArgs?;
 
-params: '[' (param COMA)* param ']';
-param: name COLON TYPE;
+args: '[' (arg COMA)* arg ']';
+arg: name COLON TYPE;
 code: CODE;
 
-returnsParams: 'returns' params;
+returnArgs: 'returns' args;
 
 fragment CAPITAL: [A-Z];
 fragment LOWER: [a-z];

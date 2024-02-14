@@ -7,11 +7,15 @@ import org.largong.clarity.grammar.ParserGrammar
 import org.largong.clarity.grammar.atoms.*
 import org.largong.clarity.grammar.builder.LexerBuilder
 import org.largong.clarity.grammar.builder.ParserBuilder
+import org.largong.clarity.grammar.scripts.Arg
+import org.largong.clarity.grammar.scripts.Script
 
 class ClarityExtractor : ClarityBaseListener() {
     private val lexerBuilder = LexerBuilder()
 
     private val parserBuilder = ParserBuilder()
+
+    private var returns = false
 
     private var _parsed = false
 
@@ -65,20 +69,30 @@ class ClarityExtractor : ClarityBaseListener() {
     }
 
     override fun enterCode(ctx: ClarityParser.CodeContext) {
-        parserBuilder.ruleBuilder.code = CodeBlock(ctx.text)
+        parserBuilder.ruleBuilder.script = Script(ctx.text)
     }
 
-    override fun enterParam(ctx: ClarityParser.ParamContext) {
-        val param = Param(ctx.name().text, ctx.TYPE().text)
-//        if (parserBuilder.ruleBuilder.returnsBlock) {
-//            parserBuilder.ruleBuilder.returnsParams.add(param)
-//        } else {
-//            parserBuilder.ruleBuilder.params.add(param)
-//        }
+    override fun enterArg(ctx: ClarityParser.ArgContext) {
+        val arg = Arg(ctx.name()!!.text, ctx.TYPE()!!.text)
+        val name = parserBuilder.ruleBuilder.name
+        parserBuilder.arguments.putIfAbsent(name, ParserBuilder.RuleDeclarationBuilder())
+        if (!returns) {
+            parserBuilder.arguments[name]!!.args.add(arg)
+        } else {
+            parserBuilder.arguments[name]!!.returns.add(arg)
+        }
     }
 
-    override fun enterReturnsParams(ctx: ClarityParser.ReturnsParamsContext?) {
-        // parserBuilder.ruleBuilder.returnsBlock = true
+    override fun enterReturnArgs(ctx: ClarityParser.ReturnArgsContext?) {
+        returns = true
+    }
+
+    override fun exitReturnArgs(ctx: ClarityParser.ReturnArgsContext?) {
+        returns = false
+    }
+
+    override fun exitDeclaration(ctx: ClarityParser.DeclarationContext?) {
+        parserBuilder.rules.removeLast()
     }
 }
 
