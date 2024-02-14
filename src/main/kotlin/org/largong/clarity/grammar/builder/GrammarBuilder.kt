@@ -1,9 +1,9 @@
-package clarity.grammar.builder
+package org.largong.clarity.grammar.builder
 
-import clarity.grammar.atoms.Atom
-import org.example.clarity.grammar.Grammar
-import org.example.clarity.grammar.builder.rule.RuleBuilder
-import org.example.clarity.grammar.rule.Rule
+import org.largong.clarity.grammar.Grammar
+import org.largong.clarity.grammar.atoms.Atom
+import org.largong.clarity.grammar.builder.rule.RuleBuilder
+import org.largong.clarity.grammar.rule.Rule
 
 /**
  * Правила грамматики, то есть список из [RuleBuilder],

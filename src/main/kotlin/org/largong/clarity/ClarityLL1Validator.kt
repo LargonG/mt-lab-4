@@ -1,17 +1,14 @@
-package clarity
+package org.largong.clarity
 
-import clarity.grammar.atoms.Atom
-import clarity.grammar.atoms.EOF
-import clarity.grammar.atoms.EmptyAtom
-import clarity.grammar.atoms.ParserAtom
-import org.example.clarity.grammar.ParserGrammar
+import org.largong.clarity.grammar.ParserGrammar
+import org.largong.clarity.grammar.atoms.Atom
+import org.largong.clarity.grammar.atoms.EOF
+import org.largong.clarity.grammar.atoms.EmptyAtom
+import org.largong.clarity.grammar.atoms.ParserAtom
 
 class ClarityLL1Validator(
     private val parser: ParserGrammar
 ) {
-    // todo проверить, что все достижимые правила конечны
-
-
     private var _first = mutableMapOf<String, MutableSet<Atom>>()
 
     private var _follow = mutableMapOf<String, MutableSet<Atom>>()

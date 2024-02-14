@@ -1,9 +1,9 @@
-package clarity
+package org.largong.clarity
 
-import clarity.grammar.atoms.LexerAtom
-import clarity.grammar.atoms.ParserAtom
-import org.example.clarity.grammar.LexerGrammar
-import org.example.clarity.grammar.ParserGrammar
+import org.largong.clarity.grammar.LexerGrammar
+import org.largong.clarity.grammar.ParserGrammar
+import org.largong.clarity.grammar.atoms.LexerAtom
+import org.largong.clarity.grammar.atoms.ParserAtom
 
 class ClarityRuleExistsValidator(
     private val lexer: LexerGrammar,

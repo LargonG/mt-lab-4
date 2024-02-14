@@ -1,17 +1,12 @@
-package clarity
+package org.largong.clarity
 
-import clarity.grammar.atoms.EmptyAtom
-import clarity.grammar.atoms.LexerAtom
-import clarity.grammar.atoms.ParserAtom
-import clarity.grammar.atoms.RegexAtom
-import clarity.grammar.builder.LexerBuilder
-import clarity.grammar.builder.ParserBuilder
-import org.example.clarity.grammar.LexerGrammar
-import org.example.clarity.grammar.ParserGrammar
-import org.example.clarity.grammar.atoms.CodeBlock
-import org.example.clarity.grammar.atoms.Param
 import org.largong.ClarityBaseListener
 import org.largong.ClarityParser
+import org.largong.clarity.grammar.LexerGrammar
+import org.largong.clarity.grammar.ParserGrammar
+import org.largong.clarity.grammar.atoms.*
+import org.largong.clarity.grammar.builder.LexerBuilder
+import org.largong.clarity.grammar.builder.ParserBuilder
 
 class ClarityExtractor : ClarityBaseListener() {
     private val lexerBuilder = LexerBuilder()
@@ -74,7 +69,16 @@ class ClarityExtractor : ClarityBaseListener() {
     }
 
     override fun enterParam(ctx: ClarityParser.ParamContext) {
-        parserBuilder.ruleBuilder.params.add(Param(ctx.name().text, ctx.TYPE().text))
+        val param = Param(ctx.name().text, ctx.TYPE().text)
+//        if (parserBuilder.ruleBuilder.returnsBlock) {
+//            parserBuilder.ruleBuilder.returnsParams.add(param)
+//        } else {
+//            parserBuilder.ruleBuilder.params.add(param)
+//        }
+    }
+
+    override fun enterReturnsParams(ctx: ClarityParser.ReturnsParamsContext?) {
+        // parserBuilder.ruleBuilder.returnsBlock = true
     }
 }
 

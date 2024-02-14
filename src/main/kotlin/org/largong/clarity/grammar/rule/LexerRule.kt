@@ -1,6 +1,6 @@
-package org.example.clarity.grammar.rule
+package org.largong.clarity.grammar.rule
 
-import clarity.grammar.atoms.RegexAtom
+import org.largong.clarity.grammar.atoms.RegexAtom
 
 data class LexerRule(
     override val name: String,

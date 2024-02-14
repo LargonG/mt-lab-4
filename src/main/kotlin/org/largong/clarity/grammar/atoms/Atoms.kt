@@ -1,4 +1,4 @@
-package clarity.grammar.atoms
+package org.largong.clarity.grammar.atoms
 
 sealed interface Atom
 

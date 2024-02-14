@@ -1,13 +1,11 @@
-package org.example
+package org.largong
 
-import clarity.ClarityExtractor
-import clarity.ClarityLL1Validator
-import clarity.ClarityRuleExistsValidator
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.tree.ParseTreeWalker
-import org.largong.ClarityLexer
-import org.largong.ClarityParser
+import org.largong.clarity.ClarityExtractor
+import org.largong.clarity.ClarityLL1Validator
+import org.largong.clarity.ClarityRuleExistsValidator
 import java.io.Reader
 import java.nio.file.Files
 import java.nio.file.Path

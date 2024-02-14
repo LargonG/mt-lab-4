@@ -1,7 +1,7 @@
-package org.example.clarity.grammar.builder.rule
+package org.largong.clarity.grammar.builder.rule
 
-import clarity.grammar.atoms.Atom
-import org.example.clarity.grammar.rule.Rule
+import org.largong.clarity.grammar.atoms.Atom
+import org.largong.clarity.grammar.rule.Rule
 
 /**
  * Представляет собой простое правило

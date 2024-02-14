@@ -1,7 +1,7 @@
-package org.example.clarity.grammar.builder.rule
+package org.largong.clarity.grammar.builder.rule
 
-import clarity.grammar.atoms.RegexAtom
-import org.example.clarity.grammar.rule.LexerRule
+import org.largong.clarity.grammar.atoms.RegexAtom
+import org.largong.clarity.grammar.rule.LexerRule
 
 /**
  * Правило для lexer

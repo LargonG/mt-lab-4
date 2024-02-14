@@ -1,9 +1,9 @@
-package clarity.grammar.builder
+package org.largong.clarity.grammar.builder
 
-import clarity.grammar.atoms.RegexAtom
-import org.example.clarity.grammar.LexerGrammar
-import org.example.clarity.grammar.builder.rule.LexerRuleBuilder
-import org.example.clarity.grammar.rule.LexerRule
+import org.largong.clarity.grammar.LexerGrammar
+import org.largong.clarity.grammar.atoms.RegexAtom
+import org.largong.clarity.grammar.builder.rule.LexerRuleBuilder
+import org.largong.clarity.grammar.rule.LexerRule
 
 
 class LexerBuilder : GrammarBuilder<RegexAtom, LexerRuleBuilder>() {

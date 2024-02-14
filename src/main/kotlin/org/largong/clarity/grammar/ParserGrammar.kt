@@ -1,7 +1,7 @@
-package org.example.clarity.grammar
+package org.largong.clarity.grammar
 
-import clarity.grammar.atoms.Atom
-import org.example.clarity.grammar.rule.ParserRule
+import org.largong.clarity.grammar.atoms.Atom
+import org.largong.clarity.grammar.rule.ParserRule
 
 data class ParserGrammar(
     val start: ParserRule,
