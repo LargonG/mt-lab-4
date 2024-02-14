@@ -9,6 +9,7 @@ import clarity.grammar.builder.ParserBuilder
 import org.example.clarity.grammar.LexerGrammar
 import org.example.clarity.grammar.ParserGrammar
 import org.example.clarity.grammar.atoms.CodeBlock
+import org.example.clarity.grammar.atoms.Param
 import org.largong.ClarityBaseListener
 import org.largong.ClarityParser
 
@@ -70,6 +71,10 @@ class ClarityExtractor : ClarityBaseListener() {
 
     override fun enterCode(ctx: ClarityParser.CodeContext) {
         parserBuilder.ruleBuilder.code = CodeBlock(ctx.text)
+    }
+
+    override fun enterParam(ctx: ClarityParser.ParamContext) {
+        parserBuilder.ruleBuilder.params.add(Param(ctx.name().text, ctx.TYPE().text))
     }
 }
 
