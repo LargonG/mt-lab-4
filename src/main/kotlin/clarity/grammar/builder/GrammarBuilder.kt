@@ -1,35 +1,27 @@
 package clarity.grammar.builder
 
 import clarity.grammar.atoms.Atom
-import clarity.grammar.rule.Rule
 import org.example.clarity.grammar.Grammar
+import org.example.clarity.grammar.builder.rule.RuleBuilder
+import org.example.clarity.grammar.rule.Rule
 
 /**
- * Правила грамматики, то есть список из [Rule],
+ * Правила грамматики, то есть список из [RuleBuilder],
  * представлено в виде таблицы:
- * название правила [String] -> List<[Rule]>, можно получить в [rules]
+ * название правила [String] -> List<[RuleBuilder]>, можно получить в [rules]
  */
-abstract class GrammarBuilder<T : Atom, F : Rule<T>> {
-    private var _rules = mutableMapOf<String, MutableList<F>>()
-    val rules: Map<String, List<F>>
-        get() = _rules
+abstract class GrammarBuilder<T : Atom, F : RuleBuilder<T>> {
+    val rules: MutableList<F> = mutableListOf()
 
-    private var _currentName = ""
+    val ruleBuilder: F
+        get() = rules.last()
 
-    var currentName: String
-        get() = _currentName
-        set(value) {
-            _currentName = value
-            _rules.putIfAbsent(value, mutableListOf())
-            _rules[value]!!.add(defaultValue(value))
-        }
-
-    private fun ruleBlock(name: String) = rules[name]!!
-
-    val currentRule: Rule<T>
-        get() = ruleBlock(currentName).last()
+    fun nextRule(name: String): F {
+        rules.add(defaultValue(name))
+        return rules.last()
+    }
 
     abstract fun defaultValue(name: String): F
 
-    abstract fun build(): Grammar<T, F>
+    abstract fun build(): Grammar<T, Rule<T>>
 }

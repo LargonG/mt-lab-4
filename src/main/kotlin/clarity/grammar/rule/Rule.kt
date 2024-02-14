@@ -1,12 +1,8 @@
-package clarity.grammar.rule
+package org.example.clarity.grammar.rule
 
 import clarity.grammar.atoms.Atom
 
-/**
- * Представляет собой простое правило
- * [name]: [atoms];
- */
-interface Rule<T : Atom> {
+interface Rule<out T : Atom> {
     val name: String
-    val atoms: MutableList<T>
+    val atoms: List<T>
 }

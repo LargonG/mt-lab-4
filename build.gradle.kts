@@ -4,7 +4,7 @@ plugins {
     idea
 }
 
-group = ""
+group = "org.largong"
 version = "1.0-SNAPSHOT"
 
 val antlr4 = "org.antlr:antlr4"

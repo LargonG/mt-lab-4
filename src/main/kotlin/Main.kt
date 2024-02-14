@@ -34,4 +34,7 @@ fun main(args: Array<String>) {
 
     val ll1 = ClarityLL1Validator(parserGrammar)
     println(ll1.isLL1Grammar())
+
+    println(lexerGrammar)
+    println(parserGrammar)
 }

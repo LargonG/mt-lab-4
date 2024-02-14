@@ -6,9 +6,9 @@ import clarity.grammar.atoms.ParserAtom
 import clarity.grammar.atoms.RegexAtom
 import clarity.grammar.builder.LexerBuilder
 import clarity.grammar.builder.ParserBuilder
-import clarity.grammar.rule.ParserRule
 import org.example.clarity.grammar.LexerGrammar
 import org.example.clarity.grammar.ParserGrammar
+import org.example.clarity.grammar.atoms.CodeBlock
 import org.largong.ClarityBaseListener
 import org.largong.ClarityParser
 
@@ -18,8 +18,6 @@ class ClarityExtractor : ClarityBaseListener() {
     private val parserBuilder = ParserBuilder()
 
     private var _parsed = false
-
-    private var started = true
 
     fun getLexerGrammar(): LexerGrammar =
         if (_parsed) lexerBuilder.build() else throw IllegalStateException()
@@ -37,44 +35,41 @@ class ClarityExtractor : ClarityBaseListener() {
     }
 
     override fun enterLexerRuleDeclaration(ctx: ClarityParser.LexerRuleDeclarationContext) {
-        lexerBuilder.currentName = ctx.text
+        lexerBuilder.nextRule(ctx.text)
     }
 
     override fun enterLexerString(ctx: ClarityParser.LexerStringContext) {
         val text = ctx.text
-        lexerBuilder.currentRule.atoms.add(
+        lexerBuilder.ruleBuilder.atoms.add(
             RegexAtom(Regex.fromLiteral(text.substring(1 until text.length)))
         )
     }
 
     override fun enterLexerRegex(ctx: ClarityParser.LexerRegexContext) {
         val text = ctx.text
-        lexerBuilder.currentRule.atoms.add(
+        lexerBuilder.ruleBuilder.atoms.add(
             RegexAtom(Regex(text.substring(1 until text.length)))
         )
     }
 
     override fun enterParserRuleDeclaration(ctx: ClarityParser.ParserRuleDeclarationContext) {
-        parserBuilder.currentName = ctx.text
-    }
-
-    override fun exitParserRuleDeclaration(ctx: ClarityParser.ParserRuleDeclarationContext?) {
-        if (started) {
-            parserBuilder.startRule = parserBuilder.currentRule as ParserRule
-            started = false
-        }
+        parserBuilder.nextRule(ctx.text)
     }
 
     override fun enterParserRuleName(ctx: ClarityParser.ParserRuleNameContext) {
-        parserBuilder.currentRule.atoms.add(ParserAtom(ctx.text))
+        parserBuilder.ruleBuilder.atoms.add(ParserAtom(ctx.text))
     }
 
     override fun enterLexerRuleName(ctx: ClarityParser.LexerRuleNameContext) {
-        parserBuilder.currentRule.atoms.add(LexerAtom(ctx.text))
+        parserBuilder.ruleBuilder.atoms.add(LexerAtom(ctx.text))
     }
 
     override fun enterEmpty(ctx: ClarityParser.EmptyContext?) {
-        parserBuilder.currentRule.atoms.add(EmptyAtom)
+        parserBuilder.ruleBuilder.atoms.add(EmptyAtom)
+    }
+
+    override fun enterCode(ctx: ClarityParser.CodeContext) {
+        parserBuilder.ruleBuilder.code = CodeBlock(ctx.text)
     }
 }
 
