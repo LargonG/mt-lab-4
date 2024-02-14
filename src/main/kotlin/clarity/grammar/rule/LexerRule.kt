@@ -8,5 +8,5 @@ import clarity.grammar.atoms.RegexAtom
 data class LexerRule(override val name: String) : Rule<RegexAtom> {
     override val atoms: MutableList<RegexAtom> = mutableListOf()
 
-    override fun toString(): String = "LexerRule(name=$name, values=$atoms)"
+    override fun toString(): String = "LexerRule(name=$name, atoms=$atoms)"
 }

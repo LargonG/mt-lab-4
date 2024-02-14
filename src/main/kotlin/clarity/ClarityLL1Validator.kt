@@ -1,13 +1,13 @@
 package clarity
 
-import clarity.grammar.ParserRules
 import clarity.grammar.atoms.Atom
 import clarity.grammar.atoms.EOF
 import clarity.grammar.atoms.EmptyAtom
 import clarity.grammar.atoms.ParserAtom
+import org.example.clarity.grammar.ParserGrammar
 
 class ClarityLL1Validator(
-    val parserRules: ParserRules
+    private val parser: ParserGrammar
 ) {
     // todo проверить, что все достижимые правила конечны
 
@@ -42,7 +42,7 @@ class ClarityLL1Validator(
         var change = true
         while (change) {
             change = false
-            for (rules in parserRules.rules.values) {
+            for (rules in parser.rules.values) {
                 for (rule in rules) {
                     val result = getFirst(rule.atoms)
                     _first.putIfAbsent(rule.name, mutableSetOf())
@@ -81,10 +81,10 @@ class ClarityLL1Validator(
     private fun getFollow() {
         var change = true
 
-        _follow[parserRules.startRule.name] = mutableSetOf(EOF)
+        _follow[parser.start.name] = mutableSetOf(EOF)
         while (change) {
             change = false
-            for (rules in parserRules.rules.values) {
+            for (rules in parser.rules.values) {
                 for (rule in rules) {
                     for (i in rule.atoms.indices) {
                         val atom = rule.atoms[i]
@@ -119,7 +119,7 @@ class ClarityLL1Validator(
 
         println()
 
-        for (group in parserRules.rules) {
+        for (group in parser.rules) {
             for (a in group.value) {
                 for (b in group.value) {
                     if (a.atoms == b.atoms) {

@@ -26,9 +26,12 @@ fun main(args: Array<String>) {
     val extractor = ClarityExtractor()
     ParseTreeWalker.DEFAULT.walk(extractor, tree)
 
-    val allExists = ClarityRuleExistsValidator(extractor.getLexer(), extractor.getParser())
+    val lexerGrammar = extractor.getLexerGrammar()
+    val parserGrammar = extractor.getParserGrammar()
+
+    val allExists = ClarityRuleExistsValidator(lexerGrammar, parserGrammar)
     println(allExists.validate())
 
-    val ll1 = ClarityLL1Validator(extractor.getParser())
+    val ll1 = ClarityLL1Validator(parserGrammar)
     println(ll1.isLL1Grammar())
 }
