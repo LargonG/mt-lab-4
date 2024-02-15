@@ -1,7 +1,6 @@
 package org.largong.clarity.grammar.builder
 
 import org.largong.clarity.grammar.Grammar
-import org.largong.clarity.grammar.atoms.Atom
 import org.largong.clarity.grammar.builder.rule.RuleBuilder
 import org.largong.clarity.grammar.rule.Rule
 
@@ -10,7 +9,7 @@ import org.largong.clarity.grammar.rule.Rule
  * представлено в виде таблицы:
  * название правила [String] -> List<[RuleBuilder]>, можно получить в [rules]
  */
-abstract class GrammarBuilder<T : Atom, F : RuleBuilder<T>> {
+abstract class GrammarBuilder<F : RuleBuilder> {
     val rules: MutableList<F> = mutableListOf()
 
     val ruleBuilder: F
@@ -23,5 +22,5 @@ abstract class GrammarBuilder<T : Atom, F : RuleBuilder<T>> {
 
     abstract fun defaultValue(name: String): F
 
-    abstract fun build(): Grammar<T, Rule<T>>
+    abstract fun build(): Grammar<Rule>
 }

@@ -7,8 +7,8 @@ import org.largong.clarity.grammar.scripts.Script
 /**
  * Правило для parser
  */
-data class ParserRuleBuilder(override val name: String) : RuleBuilder<Atom> {
-    override val atoms: MutableList<Atom> = mutableListOf()
+data class ParserRuleBuilder(override val name: String) : RuleBuilder {
+    val atoms: MutableList<Atom> = mutableListOf()
     var script: Script? = null
 
     override fun toRule(): ParserRule = ParserRule(name, atoms, script)

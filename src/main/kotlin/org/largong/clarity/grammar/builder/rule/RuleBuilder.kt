@@ -1,15 +1,13 @@
 package org.largong.clarity.grammar.builder.rule
 
-import org.largong.clarity.grammar.atoms.Atom
 import org.largong.clarity.grammar.rule.Rule
 
 /**
  * Представляет собой простое правило
- * [name]: [atoms];
+ * [name]: expression;
  */
-interface RuleBuilder<T : Atom> {
+interface RuleBuilder {
     val name: String
-    val atoms: MutableList<T>
 
-    fun toRule(): Rule<T>
+    fun toRule(): Rule
 }

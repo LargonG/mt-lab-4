@@ -1,13 +1,12 @@
 package org.largong.clarity.grammar.builder
 
 import org.largong.clarity.grammar.ParserGrammar
-import org.largong.clarity.grammar.atoms.Atom
 import org.largong.clarity.grammar.builder.rule.ParserRuleBuilder
 import org.largong.clarity.grammar.rule.ParserRule
 import org.largong.clarity.grammar.scripts.Arg
 import org.largong.clarity.grammar.scripts.Declaration
 
-class ParserBuilder : GrammarBuilder<Atom, ParserRuleBuilder>() {
+class ParserBuilder : GrammarBuilder<ParserRuleBuilder>() {
     class RuleDeclarationBuilder {
         val args: MutableList<Arg> = mutableListOf()
         val returns: MutableList<Arg> = mutableListOf()
