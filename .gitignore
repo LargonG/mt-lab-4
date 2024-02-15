@@ -43,4 +43,5 @@ bin/
 
 ### Custom ###
 .idea/
-gram.cl
+src/main/resources/gram.cl
+src/main/resources/scriptableGrammar.cl

@@ -7,6 +7,7 @@ import org.largong.clarity.grammar.ParserGrammar
 import org.largong.clarity.grammar.atoms.*
 import org.largong.clarity.grammar.builder.LexerBuilder
 import org.largong.clarity.grammar.builder.ParserBuilder
+import org.largong.clarity.grammar.scripts.ApplyArg
 import org.largong.clarity.grammar.scripts.Arg
 import org.largong.clarity.grammar.scripts.Script
 
@@ -41,14 +42,14 @@ class ClarityExtractor : ClarityBaseListener() {
     override fun enterLexerString(ctx: ClarityParser.LexerStringContext) {
         val text = ctx.text
         lexerBuilder.ruleBuilder.atoms.add(
-            RegexAtom(Regex.fromLiteral(text.substring(1 until text.length)))
+            RegexAtom(Regex.fromLiteral(compile(text.substring(1 until text.length - 1))))
         )
     }
 
     override fun enterLexerRegex(ctx: ClarityParser.LexerRegexContext) {
         val text = ctx.text
         lexerBuilder.ruleBuilder.atoms.add(
-            RegexAtom(Regex(text.substring(1 until text.length)))
+            RegexAtom(Regex(compile(text.substring(1 until text.length - 1))))
         )
     }
 
@@ -56,8 +57,19 @@ class ClarityExtractor : ClarityBaseListener() {
         parserBuilder.nextRule(ctx.text)
     }
 
-    override fun enterParserRuleName(ctx: ClarityParser.ParserRuleNameContext) {
-        parserBuilder.ruleBuilder.atoms.add(ParserAtom(ctx.text))
+    override fun enterParserRuleApply(ctx: ClarityParser.ParserRuleApplyContext) {
+        parserBuilder.ruleBuilder.atoms.add(
+            ParserAtom(
+                ctx.parserRuleName()!!.text,
+                parserBuilder.applyArgs))
+    }
+
+    override fun enterApply(ctx: ClarityParser.ApplyContext?) {
+        parserBuilder.applyArgs.clear()
+    }
+
+    override fun enterVarname(ctx: ClarityParser.VarnameContext) {
+        parserBuilder.applyArgs.add(ApplyArg(ctx.text))
     }
 
     override fun enterLexerRuleName(ctx: ClarityParser.LexerRuleNameContext) {
@@ -69,7 +81,8 @@ class ClarityExtractor : ClarityBaseListener() {
     }
 
     override fun enterCode(ctx: ClarityParser.CodeContext) {
-        parserBuilder.ruleBuilder.script = Script(ctx.text)
+        parserBuilder.ruleBuilder.script = Script(
+            ctx.text.substring(1 until ctx.text.length - 1).trimMargin().trim())
     }
 
     override fun enterArg(ctx: ClarityParser.ArgContext) {
@@ -93,6 +106,31 @@ class ClarityExtractor : ClarityBaseListener() {
 
     override fun exitDeclaration(ctx: ClarityParser.DeclarationContext?) {
         parserBuilder.rules.removeLast()
+    }
+
+    fun compile(value: String): String {
+        val builder = StringBuilder()
+        val iterator = value.iterator()
+        var flag = false
+
+        while (iterator.hasNext()) {
+            val symbol = iterator.next()
+
+            if (flag) {
+                builder.append(symbol)
+                flag = false
+                continue
+            }
+
+            if (symbol == '\\') {
+                flag = true
+                continue
+            }
+
+            builder.append(symbol)
+        }
+
+        return builder.toString()
     }
 }
 
