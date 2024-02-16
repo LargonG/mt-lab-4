@@ -20,11 +20,16 @@ class ClarityExtractor : ClarityBaseListener() {
 
     private var _parsed = false
 
+    private var packageName = ""
+
     fun getLexerGrammar(): LexerGrammar =
         if (_parsed) lexerBuilder.build() else throw IllegalStateException()
 
     fun getParserGrammar(): ParserGrammar =
         if (_parsed) parserBuilder.build() else throw IllegalStateException()
+
+    fun getPackage(): String =
+        if (_parsed) packageName else throw IllegalStateException()
 
     override fun enterGram(ctx: ClarityParser.GramContext?) {
         // если захотим сделать многопоточным (что в целом сделать очень сложно в контексте antlr4)
@@ -35,22 +40,24 @@ class ClarityExtractor : ClarityBaseListener() {
         _parsed = true
     }
 
+    override fun exitPackageName(ctx: ClarityParser.PackageNameContext) {
+        packageName = ctx.text.substringAfter("package").trim()
+    }
+
     override fun enterLexerRuleDeclaration(ctx: ClarityParser.LexerRuleDeclarationContext) {
         lexerBuilder.nextRule(ctx.text)
     }
 
     override fun enterLexerString(ctx: ClarityParser.LexerStringContext) {
         val text = ctx.text
-        lexerBuilder.ruleBuilder.atoms.add(
-            StringAtom(compile(text.substring(1 until text.length - 1)))
-        )
+        lexerBuilder.ruleBuilder.atom =
+            StringAtom(text.substring(1 until text.length - 1))
     }
 
     override fun enterLexerRegex(ctx: ClarityParser.LexerRegexContext) {
         val text = ctx.text
-        lexerBuilder.ruleBuilder.atoms.add(
-            RegexAtom(Regex(compile(text.substring(1 until text.length - 1))))
-        )
+        lexerBuilder.ruleBuilder.atom =
+            RegexAtom(text.substring(1 until text.length - 1))
     }
 
     override fun enterParserRuleDeclaration(ctx: ClarityParser.ParserRuleDeclarationContext) {

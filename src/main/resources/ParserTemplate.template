@@ -17,6 +17,7 @@ class %sParser(private val lexer: Lexer) {
 
     // rules-result
     // <rule-name> = "" if Terminal else name
+    // class <rule-name>Result((<field>: <type>)*): RuleResult
     %s
 
     // rules

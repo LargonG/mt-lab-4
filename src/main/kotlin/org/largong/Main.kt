@@ -3,6 +3,7 @@ package org.largong
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.tree.ParseTreeWalker
+import org.largong.clarity.ClarityCompiler
 import org.largong.clarity.ClarityExtractor
 import org.largong.clarity.ClarityLL1Validator
 import org.largong.clarity.ClarityRuleExistsValidator
@@ -34,4 +35,10 @@ fun main(args: Array<String>) {
 
     println(lexerGrammar)
     println(parserGrammar)
+
+    val compiler = ClarityCompiler(
+        lexerGrammar, parserGrammar,
+        args[0].split(".")[0],
+        extractor.getPackage())
+    compiler.compileLexer()
 }

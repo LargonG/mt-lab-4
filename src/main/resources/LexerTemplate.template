@@ -70,6 +70,6 @@ data class TerminalContext(val token: Token, val text: String)
  */
 enum class Token(val regex: Regex) {
     // <token-name>(if isString then Regex.fromLiteral(str) else Regex(pattern)),
-    %s
+%s
     EOF(Regex("$"));
 }

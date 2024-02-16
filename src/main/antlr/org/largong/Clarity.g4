@@ -4,10 +4,10 @@ grammar Clarity;
     package org.largong;
 }
 
-gram: rules EOF;
+gram: packageName rules EOF;
 
 rules: ruleSpec*; // сюда нужно прикрепить ещё grammar и header
-packageName: 'package' (LOWERCASE DOT)* LOWERCASE SEMI | ;
+packageName: 'package' ((LOWERCASE DOT)* LOWERCASE | VARNAME) SEMI | ;
 ruleSpec: (lexerRuleSpec | parserRuleSpec) SEMI;
 
 lexerRuleSpec: lexerRuleDeclaration COLON lexerExpression;
@@ -29,7 +29,7 @@ notEmptyParserExpression
     ;
 empty: ;
 
-lexerExpression: (lexerString | lexerRegex)+;
+lexerExpression: lexerString | lexerRegex;
 
 lexerString: STRING;
 lexerRegex: REGEX;
