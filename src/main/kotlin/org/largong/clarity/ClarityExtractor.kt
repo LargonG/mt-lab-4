@@ -42,7 +42,7 @@ class ClarityExtractor : ClarityBaseListener() {
     override fun enterLexerString(ctx: ClarityParser.LexerStringContext) {
         val text = ctx.text
         lexerBuilder.ruleBuilder.atoms.add(
-            RegexAtom(Regex.fromLiteral(compile(text.substring(1 until text.length - 1))))
+            StringAtom(compile(text.substring(1 until text.length - 1)))
         )
     }
 

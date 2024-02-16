@@ -1,0 +1,10 @@
+/*
+    assert(terminal)
+    <rule-name>.add(<Result>(context.text))
+    lexer.nextToken()
+*/
+
+nextContext = lexer.lookToken() ?: throw IllegalStateException()
+assert(nextContext.token == Token.%s)
+%s.add(Result(nextContext.text))
+lexer.nextToken()

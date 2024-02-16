@@ -1,8 +1,8 @@
 package org.largong.clarity.grammar.rule
 
-import org.largong.clarity.grammar.atoms.RegexAtom
+import org.largong.clarity.grammar.atoms.Atom
 
 data class LexerRule(
     override val name: String,
-    val atoms: List<RegexAtom>
+    val atoms: List<Atom>
 ) : Rule

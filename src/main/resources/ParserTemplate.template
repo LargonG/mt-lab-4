@@ -1,0 +1,24 @@
+/**
+ * Генерация пакета
+ */
+package %s
+
+// <file-name> Parser
+class %sParser(private val lexer: Lexer) {
+    data class Node<T: RuleResult>(
+        val name: String,
+        val data: T,
+        val children: MutableList<Node<*>> = mutableListOf(),
+    )
+
+    sealed interface RuleResult
+
+    class Result(val inner: String): RuleResult
+
+    // rules-result
+    // <rule-name> = "" if Terminal else name
+    %s
+
+    // rules
+    %s
+}

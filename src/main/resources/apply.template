@@ -1,0 +1,25 @@
+// apply<rule-name>(<args>): Node<<rule-name>Result>
+fun apply%s(%s): Node<%sResult> {
+    val context = lexer.lookToken() ?: throw IllegalStateException()
+    val root = Node("%s", NameRuleResult(0), mutableListOf())
+    val result = root.data
+    when (context.token) {
+        /*
+            for it in first:
+                case it -> { lexer.nextToken() <apply rule>
+         */
+        %s
+
+        /*
+            if (first.contains(EMPTY)) {
+                for it in follow:
+                    case it -> // do nothing
+            }
+        */
+        %s
+
+        else -> throw IllegalStateException("No excepted: ${context.token}")
+    }
+
+    return root
+}

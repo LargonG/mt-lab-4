@@ -16,7 +16,6 @@ fun getParser(lexer: ClarityLexer): ClarityParser = ClarityParser(CommonTokenStr
 
 fun main(args: Array<String>) {
     val inputFile = Path.of(args[0])
-
     val lexer = getLexer(Files.newBufferedReader(inputFile))
     val parser = getParser(lexer)
 

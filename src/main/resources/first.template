@@ -1,0 +1,25 @@
+// FIRST
+Token.%s -> {
+    lexer.nextToken()
+
+    var nextContext: Token = context.token
+
+    // rules
+    // (val <rule-name> = mutableListOf<<rule-name>Result>())*
+    %s
+
+    /*
+    if (isTerminal) {
+        assert(terminal)
+        <rule-name>.add(<Result>(context.text))
+        lexer.nextToken()
+    } else {
+        root.children.add(apply<rule-name>(<args>))
+        <rule-name>.add(root.children.last().data)
+    }
+    */
+    %s
+
+    // code
+    %s
+}

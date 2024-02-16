@@ -1,0 +1,75 @@
+/**
+ * Генерация пакета
+ */
+package %s
+
+interface Lexer {
+    fun nextToken(): TerminalContext
+    fun hasNextToken(): Boolean
+    fun lookToken(): TerminalContext?
+}
+
+/**
+ * Название берётся из названия файла
+ */
+// <file-name>Lexer
+class %sLexer(input: CharSequence): Lexer {
+    private val regex: Regex = Regex(Token.entries.joinToString("|") { it.regex.pattern })
+
+    private val iterator = regex.findAll(input).iterator()
+    private var buffer: MatchResult? = null
+
+    override fun nextToken(): TerminalContext {
+        val value: String =
+        if (buffer == null) {
+            iterator.next().value
+        } else {
+            val result = buffer
+            buffer = null
+            result?.value ?: throw NoSuchElementException()
+        }
+
+        for (it in Token.entries) {
+            if (it.regex.matches(value)) {
+                return TerminalContext(it, value)
+            }
+        }
+
+        throw IllegalStateException()
+    }
+
+    override fun hasNextToken(): Boolean {
+        return if (buffer == null) {
+            iterator.hasNext()
+        } else {
+            true
+        }
+    }
+
+    override fun lookToken(): TerminalContext? {
+        if (buffer == null) {
+            buffer = if (iterator.hasNext()) iterator.next() else null
+        }
+
+        val value = buffer?.value ?: return null
+
+        for (it in Token.entries) {
+            if (it.regex.matches(value)) {
+                return TerminalContext(it, value)
+            }
+        }
+
+        return null
+    }
+}
+
+data class TerminalContext(val token: Token, val text: String)
+
+/**
+ * Генерация всех токенов в lexer
+ */
+enum class Token(val regex: Regex) {
+    // <token-name>(if isString then Regex.fromLiteral(str) else Regex(pattern)),
+    %s
+    EOF(Regex("$"));
+}

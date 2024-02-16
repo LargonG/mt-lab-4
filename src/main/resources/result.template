@@ -1,0 +1,2 @@
+// class <rule-name>Result((<field>: <type>)*): RuleResult
+class %sResult(%s): RuleResult
