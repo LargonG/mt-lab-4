@@ -13,13 +13,13 @@ class %sParser(private val lexer: Lexer) {
 
     sealed interface RuleResult
 
-    class Result(val inner: String): RuleResult
+    data class Result(var text: String = ""): RuleResult
 
     // rules-result
     // <rule-name> = "" if Terminal else name
     // class <rule-name>Result((<field>: <type>)*): RuleResult
-    %s
+%s
 
     // rules
-    %s
+%s
 }

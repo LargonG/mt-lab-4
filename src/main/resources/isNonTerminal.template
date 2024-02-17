@@ -1,7 +1,7 @@
-/*
-    root.children.add(apply<rule-name>(<args>))
-    <rule-name>.add(root.children.last().data)
-*/
+                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(apply%s(%s))
+                %s.add(root.children.last().data as %sResult)
 
-root.children.add(apply%s(%s))
-%s.add(root.children.last().data)

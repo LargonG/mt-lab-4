@@ -8,6 +8,7 @@ import org.largong.clarity.ClarityExtractor
 import org.largong.clarity.ClarityLL1Validator
 import org.largong.clarity.ClarityRuleExistsValidator
 import java.io.Reader
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -37,8 +38,19 @@ fun main(args: Array<String>) {
     println(parserGrammar)
 
     val compiler = ClarityCompiler(
+        ll1,
         lexerGrammar, parserGrammar,
         args[0].split(".")[0],
         extractor.getPackage())
-    compiler.compileLexer()
+
+
+    val outputLexerFile = Path.of(args[1])
+    Files.newBufferedWriter(outputLexerFile, StandardCharsets.UTF_8).use {
+        it.write(compiler.compileLexer())
+    }
+
+    val outputParserFile = Path.of(args[2])
+    Files.newBufferedWriter(outputParserFile, StandardCharsets.UTF_8).use {
+        it.write(compiler.compileParser())
+    }
 }

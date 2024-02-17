@@ -49,7 +49,7 @@ class ClarityLL1Validator(
         }
     }
 
-    private fun getFirst(atoms: List<Atom>): Set<Atom> {
+    fun getFirst(atoms: List<Atom>): Set<Atom> {
         val result = mutableSetOf<Atom>()
         for (atom in atoms) {
             val next: Set<Atom> =

@@ -58,7 +58,7 @@ fragment BACKSLESH: '\\';
 fragment QUAT: '\'';
 fragment DQUAT: '"';
 
-TYPE: 'Int' | 'Long' | 'Float' | 'Double' | 'Char' | 'String' | 'Boolean' | 'Any' | 'Nothing';
+TYPE: 'Int' | 'Long' | 'Float' | 'Double' | 'Char' | 'String' | 'Boolean';
 CODE: '{' .*? '}';
 REGEX: DQUAT (~["] | BACKSLESH DQUAT)* DQUAT;
 STRING: QUAT (~['] | BACKSLESH QUAT)* QUAT;

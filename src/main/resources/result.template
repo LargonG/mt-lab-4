@@ -1,1 +1,1 @@
-class %sResult(%s): RuleResult
+    data class %sResult(%s): RuleResult
