@@ -68,7 +68,6 @@ class ClarityCompiler(
         val sourcePath = Path.of(source)
         val lexerPath = Path.of("$source/${filename}Lexer.kt")
         val parserPath = Path.of("$source/${filename}Parser.kt")
-        println(filename)
 
         if (!Files.exists(sourcePath)) {
             Files.createDirectories(sourcePath)

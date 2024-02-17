@@ -17,6 +17,8 @@ fun getParser(lexer: ClarityLexer): ClarityParser = ClarityParser(CommonTokenStr
 
 fun main(args: Array<String>) {
     val inputFile = Path.of(args[0])
+    val debug = if (args.size > 3) args[2] == "debug" else false
+
     val lexer = getLexer(Files.newBufferedReader(inputFile))
     val parser = getParser(lexer)
 
@@ -35,10 +37,11 @@ fun main(args: Array<String>) {
 
     val ll1 = ClarityLL1Validator(parserGrammar)
 
-
-    println(lexerGrammar)
-    println(parserGrammar)
-    if (!ll1.isLL1Grammar()) {
+    if (debug) {
+        println(lexerGrammar)
+        println(parserGrammar)
+    }
+    if (!ll1.isLL1Grammar(debug = debug)) {
         throw IllegalArgumentException("Grammar is not LL1!")
     }
 

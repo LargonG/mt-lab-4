@@ -103,18 +103,24 @@ class ClarityLL1Validator(
         }
     }
 
-    fun isLL1Grammar(): Boolean {
-        println("\nfirst: ")
-        for (i in first) {
-            println("\t$i")
+    fun isLL1Grammar(debug: Boolean = false): Boolean {
+        if (debug) {
+            println("\nfirst: ")
+            for (i in first) {
+                println("\t$i")
+            }
+
+            println("\nfollow: ")
+            for (i in follow) {
+                println("\t$i")
+            }
+
+            println()
         }
 
-        println("\nfollow: ")
-        for (i in follow) {
-            println("\t$i")
+        if (!calculated) {
+            getFirstAndFollow()
         }
-
-        println()
 
         for (group in parser.rules) {
             for (a in group.value) {
@@ -127,19 +133,23 @@ class ClarityLL1Validator(
                     val bFirst = getFirst(b.atoms)
 
                     if ((aFirst.any { bFirst.contains(it) })) {
-                        println("Error 1:")
-                        println("\t$a $aFirst")
-                        println("\t$b $bFirst")
+                        if (debug) {
+                            println("Error 1:")
+                            println("\t$a $aFirst")
+                            println("\t$b $bFirst")
+                        }
                         return false
                     }
 
                     if (aFirst.contains(EmptyAtom) &&
                         bFirst.any { follow[a.name]!!.contains(it) }
                     ) {
-                        println("Error 2:")
-                        println("\t$aFirst")
-                        println("\t$bFirst")
-                        println(follow[a.name])
+                        if (debug) {
+                            println("Error 2:")
+                            println("\t$aFirst")
+                            println("\t$bFirst")
+                            println(follow[a.name])
+                        }
                         return false
                     }
                 }
