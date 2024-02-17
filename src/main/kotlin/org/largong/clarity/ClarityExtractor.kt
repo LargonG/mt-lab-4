@@ -7,7 +7,6 @@ import org.largong.clarity.grammar.ParserGrammar
 import org.largong.clarity.grammar.atoms.*
 import org.largong.clarity.grammar.builder.LexerBuilder
 import org.largong.clarity.grammar.builder.ParserBuilder
-import org.largong.clarity.grammar.scripts.ApplyArg
 import org.largong.clarity.grammar.scripts.Arg
 import org.largong.clarity.grammar.scripts.Script
 
@@ -72,18 +71,11 @@ class ClarityExtractor : ClarityBaseListener() {
     }
 
     override fun enterParserRuleApply(ctx: ClarityParser.ParserRuleApplyContext) {
+        val args = ctx.apply()?.text ?: ""
         parserBuilder.ruleBuilder.atoms.add(
             ParserAtom(
                 ctx.parserRuleName()!!.text,
-                parserBuilder.applyArgs))
-    }
-
-    override fun enterApply(ctx: ClarityParser.ApplyContext?) {
-        parserBuilder.applyArgs.clear()
-    }
-
-    override fun enterVarname(ctx: ClarityParser.VarnameContext) {
-        parserBuilder.applyArgs.add(ApplyArg(ctx.text))
+                args.substringAfter("<").substringBefore(">")))
     }
 
     override fun enterLexerRuleName(ctx: ClarityParser.LexerRuleNameContext) {

@@ -6,6 +6,7 @@ import org.largong.clarity.grammar.atoms.*
 import org.largong.clarity.grammar.rule.ParserRule
 import org.largong.clarity.grammar.scripts.Arg
 import org.largong.clarity.grammar.scripts.Declaration
+import org.largong.clarity.grammar.scripts.Script
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -148,9 +149,11 @@ class ClarityCompiler(
                              first: Set<Atom>,
                              follow: Set<Atom>): String {
         val builder = StringBuilder()
+        var ifEmptyCode: Script? = null
         for (rule in rules) {
             for (it in validator.getFirst(rule.atoms)) {
                 if (it is EmptyAtom) {
+                    ifEmptyCode = rule.code
                     continue
                 }
                 builder.append(compileFirst(it as LexerAtom, rule))
@@ -165,7 +168,7 @@ class ClarityCompiler(
                         is LexerAtom -> it.name
                         else -> throw IllegalStateException()
                     }
-                builder.append(compileFollow(name))
+                builder.append(compileFollow(name, ifEmptyCode))
             }
         }
 
@@ -234,14 +237,14 @@ class ClarityCompiler(
         val capitalName = rule.name.replaceFirstChar { it.uppercaseChar() }
         return String.format(isNonTerminal,
             capitalName,
-            rule.args.joinToString(", ") { it.name },
+            rule.args,
             rule.name,
             if (parser.arguments.containsKey(rule.name)) capitalName else "")
     }
 
-    private fun compileFollow(name: String): String {
+    private fun compileFollow(name: String, code: Script?): String {
         val followTemplate = Templates.getString(Template.FOLLOW)
-        return String.format(followTemplate, name)
+        return String.format(followTemplate, name, code?.inner ?: "")
     }
 
     fun compileLexer(): String {

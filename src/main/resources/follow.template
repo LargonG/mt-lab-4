@@ -1,4 +1,5 @@
             // FOLLOW
             Token.%s -> {
-                // do nothing
+                // code
+                %s
             }

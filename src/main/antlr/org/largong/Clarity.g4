@@ -37,7 +37,6 @@ lexerString: STRING;
 lexerRegex: REGEX;
 
 name: LOWERCASE | UPPERCASE;
-varname: LOWERCASE | UPPERCASE | VARNAME;
 
 declaration: args returnArgs?;
 
@@ -45,7 +44,7 @@ args: '[' (arg COMA)* arg? ']';
 arg: name COLON TYPE;
 code: CODE;
 
-apply: '[' (varname COMA)* varname? ']';
+apply: VARNAME;
 
 returnArgs: 'returns' args;
 
@@ -55,7 +54,7 @@ fragment DIGIT: [0-9];
 fragment LETTER: CAPITAL | LOWER;
 fragment ANY_LETTER: LETTER | '_';
 fragment LETTER_OR_DIGIT: LETTER | DIGIT;
-fragment SYMBOL: ANY_LETTER | '[' | ']';
+fragment CHAR: ANY_LETTER | LETTER_OR_DIGIT;
 fragment BACKSLESH: '\\';
 fragment QUAT: '\'';
 fragment DQUAT: '"';
@@ -65,9 +64,9 @@ TYPE: 'Int' | 'Long' | 'Float' | 'Double' | 'Char' | 'String' | 'Boolean';
 CODE: '{' .*? '}';
 REGEX: DQUAT (~["] | BACKSLESH DQUAT)* DQUAT;
 STRING: QUAT (~['] | BACKSLESH QUAT)* QUAT;
-VARNAME: ANY_LETTER SYMBOL* ('.' ANY_LETTER SYMBOL*)+;
 LOWERCASE: LOWER LETTER_OR_DIGIT*;
 UPPERCASE: CAPITAL LETTER_OR_DIGIT*;
+VARNAME: '<' .*? '>';
 SPACE: (' ' | '\t' | '\r' | '\n')+ -> skip;
 DOT: '.';
 COMA: ',';
