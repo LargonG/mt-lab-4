@@ -62,6 +62,32 @@ class ClarityCompiler(
         }
     }
 
+    fun compile(directory: String) {
+        val packageDirectory = packageName.replace('.', '/')
+        val source = "$directory/$packageDirectory"
+        val sourcePath = Path.of(source)
+        val lexerPath = Path.of("$source/${filename}Lexer.kt")
+        val parserPath = Path.of("$source/${filename}Parser.kt")
+        println(filename)
+
+        if (!Files.exists(sourcePath)) {
+            Files.createDirectories(sourcePath)
+        }
+
+        Files.newBufferedWriter(
+            lexerPath
+        ).use { file ->
+            file.write(compileLexer())
+        }
+
+        Files.newBufferedWriter(
+            parserPath
+        ).use { file ->
+            file.write(compileParser())
+        }
+
+    }
+
     fun compileParser(): String {
         val parserFormat = Templates.getString(Template.PARSER)
         val results = compileResults()
@@ -229,9 +255,11 @@ class ClarityCompiler(
         val builder = StringBuilder()
         val tokenFormat = Templates.getString(Template.TOKEN)
         for (list in lexer.rules) {
-            val t = list.value[0].atom
+            val rule = list.value[0]
+            val atom = rule.atom
             builder.append(String.format(tokenFormat, list.key,
-                if (t is StringAtom) "Regex(Regex.escape(\"$t\"))" else "Regex(\"$t\")"))
+                if (atom is StringAtom) "Regex(Regex.escape(\"$atom\"))" else "Regex(\"$atom\")",
+                rule.skipped))
         }
         return builder.toString()
     }

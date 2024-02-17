@@ -1,6 +1,6 @@
             // FIRST
             Token.%s -> {
-                var nextContext: TerminalContext = context
+                var nextContext: TerminalContext
 
                 // rules
                 // (val <rule-name> = mutableListOf<<rule-name>Result>())*

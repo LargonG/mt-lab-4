@@ -1,7 +1,7 @@
 /**
  * Генерация пакета
  */
-package %s
+package calculator.grammar
 
 interface Lexer {
     fun nextToken(): TerminalContext
@@ -13,7 +13,7 @@ interface Lexer {
  * Название берётся из названия файла
  */
 // <file-name>Lexer
-class %sLexer(val input: CharSequence): Lexer {
+class CalculatorLexer(val input: CharSequence): Lexer {
     private inner class RegexIterator: Iterator<MatchResult> {
        var left = 0
 
@@ -108,6 +108,14 @@ data class TerminalContext(val token: Token, val text: String)
  */
 enum class Token(val regex: Regex, val skipped: Boolean) {
     // <token-name>(if isString then Regex.fromLiteral(str) else Regex(pattern)),
-%s
+    OPEN(Regex(Regex.escape("(")), false),
+    CLOSE(Regex(Regex.escape(")")), false),
+    ADD(Regex(Regex.escape("+")), false),
+    SUB(Regex(Regex.escape("-")), false),
+    MUL(Regex(Regex.escape("*")), false),
+    DIV(Regex(Regex.escape("/")), false),
+    NUMBER(Regex("[1-9][0-9]*|[0]"), false),
+    SPACE(Regex("[ \t\r\n]+"), true),
+
     EOF(Regex("$"), false);
 }

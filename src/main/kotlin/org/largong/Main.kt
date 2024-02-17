@@ -8,7 +8,6 @@ import org.largong.clarity.ClarityExtractor
 import org.largong.clarity.ClarityLL1Validator
 import org.largong.clarity.ClarityRuleExistsValidator
 import java.io.Reader
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -29,28 +28,26 @@ fun main(args: Array<String>) {
     val parserGrammar = extractor.getParserGrammar()
 
     val allExists = ClarityRuleExistsValidator(lexerGrammar, parserGrammar)
-    println(allExists.validate())
+
+    if (!allExists.validate()) {
+        throw IllegalArgumentException("Not all states exist")
+    }
 
     val ll1 = ClarityLL1Validator(parserGrammar)
-    println(ll1.isLL1Grammar())
+
 
     println(lexerGrammar)
     println(parserGrammar)
+    if (!ll1.isLL1Grammar()) {
+        throw IllegalArgumentException("Grammar is not LL1!")
+    }
+
 
     val compiler = ClarityCompiler(
         ll1,
         lexerGrammar, parserGrammar,
-        args[0].split(".")[0],
+        args[0].substringAfterLast("/").split(".")[0],
         extractor.getPackage())
 
-
-    val outputLexerFile = Path.of(args[1])
-    Files.newBufferedWriter(outputLexerFile, StandardCharsets.UTF_8).use {
-        it.write(compiler.compileLexer())
-    }
-
-    val outputParserFile = Path.of(args[2])
-    Files.newBufferedWriter(outputParserFile, StandardCharsets.UTF_8).use {
-        it.write(compiler.compileParser())
-    }
+    compiler.compile(args[1])
 }

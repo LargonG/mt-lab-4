@@ -41,7 +41,7 @@ class ClarityExtractor : ClarityBaseListener() {
     }
 
     override fun exitPackageName(ctx: ClarityParser.PackageNameContext) {
-        packageName = ctx.text.substringAfter("package").trim()
+        packageName = ctx.text.substringAfter("package").substringBefore(";").trim()
     }
 
     override fun enterLexerRuleDeclaration(ctx: ClarityParser.LexerRuleDeclarationContext) {
@@ -58,6 +58,13 @@ class ClarityExtractor : ClarityBaseListener() {
         val text = ctx.text
         lexerBuilder.ruleBuilder.atom =
             RegexAtom(text.substring(1 until text.length - 1))
+    }
+
+    override fun enterAction(ctx: ClarityParser.ActionContext) {
+        val text = ctx.text
+        if (text == "skip") {
+            lexerBuilder.ruleBuilder.skipped = true
+        }
     }
 
     override fun enterParserRuleDeclaration(ctx: ClarityParser.ParserRuleDeclarationContext) {
@@ -113,31 +120,6 @@ class ClarityExtractor : ClarityBaseListener() {
 
     override fun exitDeclaration(ctx: ClarityParser.DeclarationContext?) {
         parserBuilder.rules.removeLast()
-    }
-
-    fun compile(value: String): String {
-        val builder = StringBuilder()
-        val iterator = value.iterator()
-        var flag = false
-
-        while (iterator.hasNext()) {
-            val symbol = iterator.next()
-
-            if (flag) {
-                builder.append(symbol)
-                flag = false
-                continue
-            }
-
-            if (symbol == '\\') {
-                flag = true
-                continue
-            }
-
-            builder.append(symbol)
-        }
-
-        return builder.toString()
     }
 }
 

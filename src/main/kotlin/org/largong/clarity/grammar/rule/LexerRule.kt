@@ -4,5 +4,6 @@ import org.largong.clarity.grammar.atoms.Atom
 
 data class LexerRule(
     override val name: String,
-    val atom: Atom
+    val atom: Atom,
+    val skipped: Boolean
 ) : Rule

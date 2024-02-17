@@ -29,7 +29,9 @@ notEmptyParserExpression
     ;
 empty: ;
 
-lexerExpression: lexerString | lexerRegex;
+lexerExpression: (lexerString | lexerRegex) ('->' action)?;
+
+action: SKIP_WORD;
 
 lexerString: STRING;
 lexerRegex: REGEX;
@@ -58,6 +60,7 @@ fragment BACKSLESH: '\\';
 fragment QUAT: '\'';
 fragment DQUAT: '"';
 
+SKIP_WORD: 'skip';
 TYPE: 'Int' | 'Long' | 'Float' | 'Double' | 'Char' | 'String' | 'Boolean';
 CODE: '{' .*? '}';
 REGEX: DQUAT (~["] | BACKSLESH DQUAT)* DQUAT;
@@ -70,3 +73,4 @@ DOT: '.';
 COMA: ',';
 COLON: ':';
 SEMI: ';';
+ARROW: '->';

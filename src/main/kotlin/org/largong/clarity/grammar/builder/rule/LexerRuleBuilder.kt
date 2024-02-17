@@ -8,7 +8,10 @@ import org.largong.clarity.grammar.rule.LexerRule
  */
 data class LexerRuleBuilder(override val name: String) : RuleBuilder {
     var atom: Atom? = null
-    override fun toRule(): LexerRule = LexerRule(name, atom ?: throw IllegalStateException())
+    var skipped: Boolean = false
+
+    override fun toRule(): LexerRule =
+        LexerRule(name, atom ?: throw IllegalStateException(), skipped)
 
     override fun toString(): String = "LexerRule(name=$name, atom=$atom)"
 }
