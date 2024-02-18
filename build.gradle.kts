@@ -23,6 +23,7 @@ dependencies {
 
     // graphviz
     implementation("guru.nidi:graphviz-java:0.18.1")
+    implementation("org.slf4j:slf4j-simple:1.7.32")
 }
 
 tasks.test {
