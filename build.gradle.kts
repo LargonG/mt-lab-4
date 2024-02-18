@@ -20,6 +20,9 @@ dependencies {
     // antlr
     antlr("$antlr4:$antlrVersion")
     compileOnly("$antlr4-runtime:$antlrVersion")
+
+    // graphviz
+    implementation("guru.nidi:graphviz-java:0.18.1")
 }
 
 tasks.test {
