@@ -24,6 +24,8 @@ class CalculatorParser(private val lexer: Lexer) {
 
     data class SumResult(var result: Double = 0.0): RuleResult
 
+    data class SumAfterResult(var result: Double = 0.0): RuleResult
+
     data class SumContResult(var result: Double = 0.0): RuleResult
 
     data class AtomResult(var result: Double = 0.0): RuleResult
@@ -252,11 +254,19 @@ class CalculatorParser(private val lexer: Lexer) {
             }
             // FOLLOW
             Token.EOF -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 result.result = left
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 result.result = left
             }
@@ -291,7 +301,7 @@ class CalculatorParser(private val lexer: Lexer) {
                 // rules
                 // (val <rule-name> = mutableListOf<<rule-name>Result>())*
                 val atom = mutableListOf<AtomResult>()
-                val sumCont = mutableListOf<SumContResult>()
+                val sumAfter = mutableListOf<SumAfterResult>()
 
 
                 /*
@@ -308,24 +318,24 @@ class CalculatorParser(private val lexer: Lexer) {
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applyAtom(1.0, true))
+                root.children.add(applyAtom(1.0, "mul"))
                 atom.add(root.children.last().data as AtomResult)
 
                 /*
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applySumCont(atom[0].result))
-                sumCont.add(root.children.last().data as SumContResult)
+                root.children.add(applySumAfter(atom[0].result))
+                sumAfter.add(root.children.last().data as SumAfterResult)
 
 
 
                 // code
-                result.result =
+                result.result = left +
     if (add)
-        left + sumCont[0].result
+        + sumAfter[0].result
     else
-        left - sumCont[0].result
+        - sumAfter[0].result
             }
             // FIRST
             Token.NUMBER -> {
@@ -334,6 +344,72 @@ class CalculatorParser(private val lexer: Lexer) {
                 // rules
                 // (val <rule-name> = mutableListOf<<rule-name>Result>())*
                 val atom = mutableListOf<AtomResult>()
+                val sumAfter = mutableListOf<SumAfterResult>()
+
+
+                /*
+                if (isTerminal) {
+                    assert(terminal)
+                    <rule-name>.add(<Result>(context.text))
+                    lexer.nextToken()
+                } else {
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                }
+                */
+                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applyAtom(1.0, "mul"))
+                atom.add(root.children.last().data as AtomResult)
+
+                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySumAfter(atom[0].result))
+                sumAfter.add(root.children.last().data as SumAfterResult)
+
+
+
+                // code
+                result.result = left +
+    if (add)
+        + sumAfter[0].result
+    else
+        - sumAfter[0].result
+            }
+
+
+            else -> throw IllegalStateException("No excepted: ${context.token}")
+        }
+
+        return root
+    }
+
+    // apply<rule-name>(<args>): Node<<rule-name>Result>
+    fun applySumAfter(leftAtom: Double = 0.0): Node<SumAfterResult> {
+        val context = lexer.lookToken() ?: throw IllegalStateException()
+        val root = Node("sumAfter", SumAfterResult(), mutableListOf())
+        val result = root.data
+        when (context.token) {
+            /*
+                for it in first:
+                    <first>(it)
+
+                if (first.contains(EMPTY)) {
+                     for it in follow:
+                         <follow>(it)
+                 }
+             */
+
+            // FIRST
+            Token.MUL -> {
+                var nextContext: TerminalContext
+
+                // rules
+                // (val <rule-name> = mutableListOf<<rule-name>Result>())*
                 val sumCont = mutableListOf<SumContResult>()
 
 
@@ -351,24 +427,155 @@ class CalculatorParser(private val lexer: Lexer) {
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applyAtom(1.0, true))
-                atom.add(root.children.last().data as AtomResult)
-
-                /*
-                    root.children.add(apply<rule-name>(<args>))
-                    <rule-name>.add(root.children.last().data)
-                */
-                root.children.add(applySumCont(atom[0].result))
+                root.children.add(applySumCont(leftAtom))
                 sumCont.add(root.children.last().data as SumContResult)
 
 
 
                 // code
-                result.result =
-    if (add)
-        left + sumCont[0].result
-    else
-        left - sumCont[0].result
+                result.result = sumCont[0].result
+            }
+            // FIRST
+            Token.DIV -> {
+                var nextContext: TerminalContext
+
+                // rules
+                // (val <rule-name> = mutableListOf<<rule-name>Result>())*
+                val sumCont = mutableListOf<SumContResult>()
+
+
+                /*
+                if (isTerminal) {
+                    assert(terminal)
+                    <rule-name>.add(<Result>(context.text))
+                    lexer.nextToken()
+                } else {
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                }
+                */
+                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySumCont(leftAtom))
+                sumCont.add(root.children.last().data as SumContResult)
+
+
+
+                // code
+                result.result = sumCont[0].result
+            }
+            // FIRST
+            Token.LOG -> {
+                var nextContext: TerminalContext
+
+                // rules
+                // (val <rule-name> = mutableListOf<<rule-name>Result>())*
+                val LOG = mutableListOf<Result>()
+                val sum = mutableListOf<SumResult>()
+
+
+                /*
+                if (isTerminal) {
+                    assert(terminal)
+                    <rule-name>.add(<Result>(context.text))
+                    lexer.nextToken()
+                } else {
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                }
+                */
+                /*
+                    assert(terminal)
+                    <rule-name>.add(<Result>(context.text))
+                    lexer.nextToken()
+                */
+                nextContext = lexer.lookToken() ?: throw IllegalStateException()
+                assert(nextContext.token == Token.LOG)
+                LOG.add(Result(nextContext.text))
+                root.children.add(Node(nextContext.token.name, Result(nextContext.text)))
+                lexer.nextToken()
+
+                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySum(0.0, true))
+                sum.add(root.children.last().data as SumResult)
+
+
+
+                // code
+                result.result = kotlin.math.log(leftAtom, sum[0].result)
+            }
+            // FOLLOW
+            Token.ADD -> {
+                // variables
+                                val sumCont = mutableListOf<SumContResult>()
+
+                // non-terminals
+                                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySumCont(leftAtom))
+                sumCont.add(root.children.last().data as SumContResult)
+
+
+                // code
+                result.result = sumCont[0].result
+            }
+            // FOLLOW
+            Token.SUB -> {
+                // variables
+                                val sumCont = mutableListOf<SumContResult>()
+
+                // non-terminals
+                                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySumCont(leftAtom))
+                sumCont.add(root.children.last().data as SumContResult)
+
+
+                // code
+                result.result = sumCont[0].result
+            }
+            // FOLLOW
+            Token.EOF -> {
+                // variables
+                                val sumCont = mutableListOf<SumContResult>()
+
+                // non-terminals
+                                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySumCont(leftAtom))
+                sumCont.add(root.children.last().data as SumContResult)
+
+
+                // code
+                result.result = sumCont[0].result
+            }
+            // FOLLOW
+            Token.CLOSE -> {
+                // variables
+                                val sumCont = mutableListOf<SumContResult>()
+
+                // non-terminals
+                                /*
+                    root.children.add(apply<rule-name>(<args>))
+                    <rule-name>.add(root.children.last().data)
+                */
+                root.children.add(applySumCont(leftAtom))
+                sumCont.add(root.children.last().data as SumContResult)
+
+
+                // code
+                result.result = sumCont[0].result
             }
 
 
@@ -402,7 +609,7 @@ class CalculatorParser(private val lexer: Lexer) {
                 // (val <rule-name> = mutableListOf<<rule-name>Result>())*
                 val MUL = mutableListOf<Result>()
                 val atom = mutableListOf<AtomResult>()
-                val sumCont = mutableListOf<SumContResult>()
+                val sumAfter = mutableListOf<SumAfterResult>()
 
 
                 /*
@@ -430,20 +637,20 @@ class CalculatorParser(private val lexer: Lexer) {
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applyAtom(left, true))
+                root.children.add(applyAtom(left, "mul"))
                 atom.add(root.children.last().data as AtomResult)
 
                 /*
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applySumCont(atom[0].result))
-                sumCont.add(root.children.last().data as SumContResult)
+                root.children.add(applySumAfter(atom[0].result))
+                sumAfter.add(root.children.last().data as SumAfterResult)
 
 
 
                 // code
-                result.result = sumCont[0].result
+                result.result = sumAfter[0].result
             }
             // FIRST
             Token.DIV -> {
@@ -453,7 +660,7 @@ class CalculatorParser(private val lexer: Lexer) {
                 // (val <rule-name> = mutableListOf<<rule-name>Result>())*
                 val DIV = mutableListOf<Result>()
                 val atom = mutableListOf<AtomResult>()
-                val sumCont = mutableListOf<SumContResult>()
+                val sumAfter = mutableListOf<SumAfterResult>()
 
 
                 /*
@@ -481,38 +688,54 @@ class CalculatorParser(private val lexer: Lexer) {
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applyAtom(left, false))
+                root.children.add(applyAtom(left, "div"))
                 atom.add(root.children.last().data as AtomResult)
 
                 /*
                     root.children.add(apply<rule-name>(<args>))
                     <rule-name>.add(root.children.last().data)
                 */
-                root.children.add(applySumCont(atom[0].result))
-                sumCont.add(root.children.last().data as SumContResult)
+                root.children.add(applySumAfter(atom[0].result))
+                sumAfter.add(root.children.last().data as SumAfterResult)
 
 
 
                 // code
-                result.result = sumCont[0].result
+                result.result = sumAfter[0].result
             }
             // FOLLOW
             Token.ADD -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 result.result = left
             }
             // FOLLOW
             Token.SUB -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 result.result = left
             }
             // FOLLOW
             Token.EOF -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 result.result = left
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 result.result = left
             }
@@ -525,7 +748,7 @@ class CalculatorParser(private val lexer: Lexer) {
     }
 
     // apply<rule-name>(<args>): Node<<rule-name>Result>
-    fun applyAtom(left: Double = 0.0, mul: Boolean = false): Node<AtomResult> {
+    fun applyAtom(left: Double = 0.0, op: String = ""): Node<AtomResult> {
         val context = lexer.lookToken() ?: throw IllegalStateException()
         val root = Node("atom", AtomResult(), mutableListOf())
         val result = root.data
@@ -594,7 +817,7 @@ class CalculatorParser(private val lexer: Lexer) {
 
                 // code
                 result.result =
-    if (mul)
+    if (op == "mul")
         left * expr[0].result
     else
         left / expr[0].result
@@ -633,7 +856,7 @@ class CalculatorParser(private val lexer: Lexer) {
 
                 // code
                 result.result =
-    if (mul)
+    if (op == "mul")
         left * Integer.parseInt(NUMBER[0].text).toDouble()
     else
         left / Integer.parseInt(NUMBER[0].text).toDouble()

@@ -2,6 +2,7 @@ package calculator
 
 import calculator.grammar.CalculatorLexer
 import calculator.grammar.CalculatorParser
+import java.util.*
 import kotlin.math.abs
 import kotlin.test.Test
 
@@ -28,8 +29,21 @@ object CalculatorTests {
             val parser = CalculatorParser(lexer)
             val res = parser.applyExpr()
 
-            assert(abs(res.data.result - test.second) < EPS
+            assert(
+                abs(res.data.result - test.second) < EPS
             ) { "Calculation failed: excepted: ${test.second}; found: ${res.data.result}" }
         }
+    }
+}
+
+fun main() {
+    val scanner = Scanner(System.`in`)
+    while (true) {
+        val expr = scanner.nextLine()
+        val lexer = CalculatorLexer(expr)
+        val parser = CalculatorParser(lexer)
+        val res = parser.applyExpr()
+
+        println(res.data.result)
     }
 }

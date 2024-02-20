@@ -321,16 +321,28 @@ class ExpressionParser(private val lexer: Lexer) {
             }
             // FOLLOW
             Token.EOF -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.COMA -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
@@ -591,26 +603,46 @@ class ExpressionParser(private val lexer: Lexer) {
             }
             // FOLLOW
             Token.ADD -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.SUB -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.EOF -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.COMA -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
@@ -895,31 +927,55 @@ class ExpressionParser(private val lexer: Lexer) {
             }
             // FOLLOW
             Token.MUL -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.ADD -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.SUB -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.EOF -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
             // FOLLOW
             Token.COMA -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
@@ -1105,6 +1161,10 @@ class ExpressionParser(private val lexer: Lexer) {
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }
@@ -1185,6 +1245,10 @@ class ExpressionParser(private val lexer: Lexer) {
             }
             // FOLLOW
             Token.CLOSE -> {
+                // variables
+                
+                // non-terminals
+                
                 // code
                 
             }

@@ -1,5 +1,9 @@
             // FOLLOW
             Token.%s -> {
+                // variables
+                %s
+                // non-terminals
+                %s
                 // code
                 %s
             }

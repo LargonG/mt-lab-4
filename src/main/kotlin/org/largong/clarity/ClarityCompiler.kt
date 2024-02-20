@@ -149,11 +149,15 @@ class ClarityCompiler(
                              first: Set<Atom>,
                              follow: Set<Atom>): String {
         val builder = StringBuilder()
+
         var ifEmptyCode: Script? = null
+        var ifEmptyRules: List<Atom>? = null
+
         for (rule in rules) {
             for (it in validator.getFirst(rule.atoms)) {
                 if (it is EmptyAtom) {
                     ifEmptyCode = rule.code
+                    ifEmptyRules = rule.atoms
                     continue
                 }
                 builder.append(compileFirst(it as LexerAtom, rule))
@@ -168,7 +172,7 @@ class ClarityCompiler(
                         is LexerAtom -> it.name
                         else -> throw IllegalStateException()
                     }
-                builder.append(compileFollow(name, ifEmptyCode))
+                builder.append(compileFollow(name, ifEmptyRules!!, ifEmptyCode))
             }
         }
 
@@ -242,9 +246,11 @@ class ClarityCompiler(
             if (parser.arguments.containsKey(rule.name)) capitalName else "")
     }
 
-    private fun compileFollow(name: String, code: Script?): String {
+    private fun compileFollow(name: String, rules: List<Atom>, code: Script?): String {
         val followTemplate = Templates.getString(Template.FOLLOW)
-        return String.format(followTemplate, name, code?.inner ?: "")
+        val filtered = rules.filterNot { it is EmptyAtom }
+        return String.format(followTemplate, name, compileVariables(filtered),
+            compileCaseActions(filtered), code?.inner ?: "")
     }
 
     fun compileLexer(): String {

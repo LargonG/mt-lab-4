@@ -113,6 +113,7 @@ enum class Token(val regex: Regex, val skipped: Boolean) {
     ADD(Regex(Regex.escape("+")), false),
     SUB(Regex(Regex.escape("-")), false),
     MUL(Regex(Regex.escape("*")), false),
+    LOG(Regex(Regex.escape("//")), false),
     DIV(Regex(Regex.escape("/")), false),
     NUMBER(Regex("[1-9][0-9]*|[0]"), false),
     SPACE(Regex("[ \t\r\n]+"), true),
